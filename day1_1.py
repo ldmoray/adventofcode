@@ -25,7 +25,7 @@ def main():
 			with open(args.file, 'r') as f:
 				pattern = f.next()
 		except IOError as err:
-			print 'There was an error reading from disk: %s' % err.args
+			print 'There was an error reading from disk: %s' % err.strerror
 			exit()
 	try:
 		floor_count = count_parens(pattern)
