@@ -13,7 +13,6 @@ def increment_floor(char):
 
 
 def first_entry(string, target):
-    # load input from file
     current_floor = 0
     count = 0
     for char in string:
