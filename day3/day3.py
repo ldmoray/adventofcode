@@ -1,4 +1,5 @@
 import argparse
+from random import randint
 
 
 def visit_houses(pattern, santas):
@@ -34,7 +35,7 @@ def visit_houses(pattern, santas):
 
 
 def create_3d_input(n):
-    return ''.join(['<>v^()'[r.randint(0, len('<>v^()') - 1)] for i in range(n)])
+    return ''.join(['<>v^()'[randint(0, len('<>v^()') - 1)] for i in range(n)])
 
 
 def main():
