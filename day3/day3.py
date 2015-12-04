@@ -43,7 +43,6 @@ def main():
     parser.add_argument('pattern', help='The pattern of directiosn to solve', default='', nargs='?')
     parser.add_argument('-f', '--file', help='Read the pattern from a file instead of from the command line')
     parser.add_argument('-s', '--santas', help='The number of santas reading the instructions', default=1)
-    parser.add_argument('-d', '--dimensions', help='The dimensionality of the (hyper)plane santa travels on.', default='2')
     args = parser.parse_args()
 
     pattern = args.pattern
