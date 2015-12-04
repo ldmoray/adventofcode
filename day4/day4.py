@@ -10,11 +10,10 @@ class AdventCoin(object):
 
     def __call__(self, num):
         res = 0
-        hashed = hashlib.md5(self.secret + str(num)).hexdigest()[:len(self.prefix)]
-        if hashed == self.prefix:
+        hashed = hashlib.md5(self.secret + str(num)).hexdigest()
+        if hashed.startswith(self.prefix):
             res = num
         return res
-
 
 
 def main():
