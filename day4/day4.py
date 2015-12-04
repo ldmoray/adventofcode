@@ -22,7 +22,7 @@ def find_smallest_int(secret, prefix, step=800000):
     n = 0
     coin = AdventCoin(secret, prefix)
     while not answer:
-        for i in pool.imap_unordered(coin, range(n, n+step), chunksize=1000):
+        for i in pool.imap_unordered(coin, range(n, n + step), chunksize=1000):
             answer = i
             if answer:
                 pool.terminate()
