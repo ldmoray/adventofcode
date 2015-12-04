@@ -32,6 +32,11 @@ def visit_houses(pattern, santas):
     houses = [house for subhouses in houses for house in subhouses]
     return houses
 
+
+def create_3d_input(n):
+    return ''.join(['<>v^()'[r.randint(0, len('<>v^()') - 1)] for i in range(n)])
+
+
 def main():
     parser = argparse.ArgumentParser(description='Solve the day 3 challenges for Advent of Code')
     parser.add_argument('pattern', help='The pattern of directiosn to solve', default='', nargs='?')
