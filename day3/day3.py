@@ -4,7 +4,7 @@ import argparse
 def visit_houses(pattern, santas):
     which = 0
     curr = (0,0)
-    houses = [[curr]] * santas
+    houses = [[curr] for i in range(santas)]
     for char in pattern:
         which_houses = houses[which]
         curr = which_houses[-1]
@@ -19,12 +19,7 @@ def visit_houses(pattern, santas):
             which_houses.append(curr)
         elif char == '<':
             curr = (curr[0], curr[1] - 1)
-            print curr
-            print which_houses
-            print houses
             which_houses.append(curr)
-            print which_houses
-            print houses
         elif char != '\n':
             raise ValueError('Invalid instruction for Santa')
         which = (which + 1) % santas
@@ -52,7 +47,6 @@ def main():
     try:
         santas = int(args.santas)
         houses = visit_houses(pattern, santas)
-        print houses
         print 'Houses Visited: %d' % len(set(houses))
     except ValueError as err:
         print str(err)
