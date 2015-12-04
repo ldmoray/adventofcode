@@ -16,6 +16,21 @@ class AdventCoin(object):
         return res
 
 
+def find_smallest_int(secret, prefix, step=800000):
+    pool = Pool()
+    answer = 0
+    n = 0
+    coin = AdventCoin(secret, prefix)
+    while not answer:
+        for i in pool.imap_unordered(coin, range(n, n+step), chunksize=1000):
+            answer = i
+            if answer:
+                pool.terminate()
+                break
+        n = n + step
+    return answer
+
+
 def main():
     parser = argparse.ArgumentParser(description='Solve the day 4 challenges for Advent of Code')
     parser.add_argument('secret', help='The secret to use', nargs='?')
@@ -23,18 +38,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        pool = Pool()
-        a = 0
-        n = 0
-        step = 800000
-        coin = AdventCoin(args.secret, args.prefix)
-        while not a:
-            for i in pool.imap_unordered(coin, range(n, n+step), chunksize=1000):
-                a = i
-                if a:
-                    pool.terminate()
-                    break
-            n = n + step
+        a = find_smallest_int(args.secret, args.prefix)
         print "The smallest positive integer is %d" % a
     except ValueError as err:
         print str(err)
