@@ -3,22 +3,28 @@ import argparse
 
 def visit_houses(pattern, santas):
     which = 0
-    curr = (0,0)
+    curr = (0, 0, 0)
     houses = [[curr] for i in range(santas)]
     for char in pattern:
         which_houses = houses[which]
         curr = which_houses[-1]
         if char == '^':
-            curr = (curr[0] + 1, curr[1])
+            curr = (curr[0] + 1, curr[1], curr[2])
             which_houses.append(curr)
         elif char == 'v':
-            curr = (curr[0] - 1, curr[1])
+            curr = (curr[0] - 1, curr[1], curr[2])
             which_houses.append(curr)
         elif char == '>':
-            curr = (curr[0], curr[1] + 1)
+            curr = (curr[0], curr[1] + 1, curr[2])
             which_houses.append(curr)
         elif char == '<':
-            curr = (curr[0], curr[1] - 1)
+            curr = (curr[0], curr[1] - 1, curr[2])
+            which_houses.append(curr)
+        elif char == '(':
+            curr = (curr[0], curr[1], curr[2] + 1)
+            which_houses.append(curr)
+        elif char == ')':
+            curr = (curr[0], curr[1], curr[2] - 1)
             which_houses.append(curr)
         elif char != '\n':
             raise ValueError('Invalid instruction for Santa')
@@ -31,6 +37,7 @@ def main():
     parser.add_argument('pattern', help='The pattern of directiosn to solve', default='', nargs='?')
     parser.add_argument('-f', '--file', help='Read the pattern from a file instead of from the command line')
     parser.add_argument('-s', '--santas', help='The number of santas reading the instructions', default=1)
+    parser.add_argument('-d', '--dimensions', help='The dimensionality of the (hyper)plane santa travels on.', default='2')
     args = parser.parse_args()
 
     pattern = args.pattern
