@@ -2,44 +2,41 @@ import argparse
 import hashlib
 from multiprocessing import Pool
 
-def foo(i):
-    a = hashlib.md5('yzbqklnj' + str(i)).hexdigest()
-    if a[0:6] == '000000':
-        return i
-    return 0
+
+class AdventCoin(object):
+    def __init__(self, secret, prefix):
+        self.secret = secret
+        self.prefix = prefix
+
+    def __call__(self, num):
+        res = 0
+        hashed = hashlib.md5(self.secret + str(num)).hexdigest()[:len(self.prefix)]
+        if hashed == self.prefix:
+            res = num
+        return res
+
 
 
 def main():
     parser = argparse.ArgumentParser(description='Solve the day 4 challenges for Advent of Code')
-    parser.add_argument('pattern', help='The pattern of parentheses to solve', default='', nargs='?')
-    parser.add_argument('-f', '--file', help='Read the pattern from a file instead of from the command line')
+    parser.add_argument('secret', help='The secret to use', nargs='?')
+    parser.add_argument('prefix', help='The prefix to find', nargs='?')
     args = parser.parse_args()
 
-    pattern = args.pattern
-    if args.file:
-        try:
-            with open(args.file, 'r') as f:
-                pattern = f.next()
-        except IOError as err:
-            print 'There was an error reading from disk: %s' % err.strerror
-            exit()
-    if not pattern:
-        print 'Please enter a pattern'
-        exit()
     try:
         pool = Pool()
         a = 0
         n = 0
-        step = 1000000
+        step = 800000
+        coin = AdventCoin(args.secret, args.prefix)
         while not a:
-            for i in pool.imap_unordered(foo, range(n, n+step), chunksize=10000):
+            for i in pool.imap_unordered(coin, range(n, n+step), chunksize=1000):
                 a = i
                 if a:
-                    print a
                     pool.terminate()
                     break
             n = n + step
-            print "next step %d" % n
+        print "The smallest positive integer is %d" % a
     except ValueError as err:
         print str(err)
 
