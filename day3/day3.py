@@ -1,30 +1,41 @@
 import argparse
 
 
-def visit_houses(pattern):
+def visit_houses(pattern, santas):
+    which = 0
     curr = (0,0)
-    houses = [curr]
+    houses = [[curr]] * santas
     for char in pattern:
+        which_houses = houses[which]
+        curr = which_houses[-1]
         if char == '^':
             curr = (curr[0] + 1, curr[1])
-            houses.append(curr)
+            which_houses.append(curr)
         elif char == 'v':
             curr = (curr[0] - 1, curr[1])
-            houses.append(curr)
+            which_houses.append(curr)
         elif char == '>':
             curr = (curr[0], curr[1] + 1)
-            houses.append(curr)
+            which_houses.append(curr)
         elif char == '<':
             curr = (curr[0], curr[1] - 1)
-            houses.append(curr)
+            print curr
+            print which_houses
+            print houses
+            which_houses.append(curr)
+            print which_houses
+            print houses
         elif char != '\n':
             raise ValueError('Invalid instruction for Santa')
+        which = (which + 1) % santas
+    houses = [house for subhouses in houses for house in subhouses]
     return houses
 
 def main():
     parser = argparse.ArgumentParser(description='Solve the day 3 challenges for Advent of Code')
     parser.add_argument('pattern', help='The pattern of directiosn to solve', default='', nargs='?')
     parser.add_argument('-f', '--file', help='Read the pattern from a file instead of from the command line')
+    parser.add_argument('-s', '--santas', help='The number of santas reading the instructions', default=1)
     args = parser.parse_args()
 
     pattern = args.pattern
@@ -39,7 +50,9 @@ def main():
         print 'Please enter a pattern'
         exit()
     try:
-        houses = visit_houses(pattern)
+        santas = int(args.santas)
+        houses = visit_houses(pattern, santas)
+        print houses
         print 'Houses Visited: %d' % len(set(houses))
     except ValueError as err:
         print str(err)
