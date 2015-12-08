@@ -16,10 +16,12 @@ def build_circuit(string):
 
 def get_signal(wire):
     res = None
+    if isinstance(wire, (int, long)):
+        return wire
     source = circuit[wire]
     if len(source) == 1:
         if isinstance(source[0], (int, long)):
-            res = source
+            res = source[0]
         else:
             res = get_signal(source[0])
     else:
@@ -32,11 +34,12 @@ def get_signal(wire):
             if command == 'AND':
                 res = get_signal(a) & get_signal(b)
             elif command == 'OR':
-                res = get_signal(a) & get_signal(b)
+                res = get_signal(a) | get_signal(b)
             elif command == 'LSHIFT':
                 res = get_signal(a) << b
             else:
                 res = get_signal(a) >> b
+    circuit[wire] = [res]
     return res
 
 
