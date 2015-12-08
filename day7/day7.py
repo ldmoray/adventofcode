@@ -59,6 +59,7 @@ def main():
             for instruction in instructions:
                 build_circuit(instruction)
 
+            build_circuit('3176 -> b')
             print get_signal('a')
             exit()
         except IOError as err:
