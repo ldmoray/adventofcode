@@ -24,6 +24,15 @@ class Graph(object):
             lengths.append(self.find_length(route))
         return min(lengths)
 
+    def find_longest_route(self):
+        lengths = []
+        for k in self.cities:
+            route = [k]
+            self.find_routes(route)
+        for route in self.routes:
+            lengths.append(self.find_length(route))
+        return max(lengths)
+
     def find_routes(self, route):
         curr = route[-1]
         if len(route) == len(self.cities.keys()):
@@ -64,7 +73,7 @@ def main():
                 i = instruction.split(' ')
                 graph.add_city(i[0], i[2], int(i[-1]))
 
-            print graph.find_shortest_route()
+            print graph.find_longest_route()
             exit()
         except IOError as err:
             print 'There was an error reading from disk: %s' % err.strerror
