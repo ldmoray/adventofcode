@@ -29,10 +29,11 @@ def main():
 
     string = args.string
     try:
-        for i in range(40):
+        for i in range(50):
             string = look_and_say(string)
 
         print len(string)
+
     except ValueError as err:
         print str(err)
 
