@@ -1,12 +1,18 @@
 import argparse
 import json
 
+def has_red(obj):
+    for k in obj:
+        if obj[k] == 'red':
+            return True
+    return False
 
 def strip_numbers(obj):
     res = []
     if isinstance(obj, dict):
-        for k in obj:
-            res.extend(strip_numbers(obj[k]))
+        if not has_red(obj):
+            for k in obj:
+                res.extend(strip_numbers(obj[k]))
     elif isinstance(obj, list):
         for i in obj:
             res.extend(strip_numbers(i))
