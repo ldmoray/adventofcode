@@ -39,7 +39,9 @@ def is_secure_1(string):
 
 def next_string(string):
     res = ''
-    if string[-1] == 'z':
+    if not string:
+        res = 'a'
+    elif string[-1] == 'z':
         res = next_string(string[:-1]) + 'a'
     else:
         res = string[:-1] + chr(ord(string[-1]) + 1)
