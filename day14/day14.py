@@ -10,20 +10,21 @@ class Reindeer(object):
         self.distance = 0
         self.resting = False
         self.time = 0
+        self.points = 0
 
     def tick(self):
         if self.resting:
-            if self.time == self.rest_time:
+            if self.time == self.rest_time - 1:
                 self.time = 0
                 self.resting = False
             else:
                 self.time += 1
         else:
-            if self.time == self.sprint_time:
+            self.distance += self.speed
+            if self.time == self.sprint_time - 1:
                 self.time = 0
                 self.resting = True
             else:
-                self.distance += self.speed
                 self.time += 1
 
 
@@ -39,6 +40,8 @@ def parse_reindeer(line):
 def tick(race):
     for r in race:
         r.tick()
+    race.sort(key=lambda r: r.distance, reverse=True)
+    race[0].points += 1
 
 
 def main():
@@ -47,17 +50,22 @@ def main():
     parser.add_argument('file', help='The files to read the rules from', nargs='?')
     args = parser.parse_args()
     rules = []
+    rules2 = []
     try:
         with open(args.file, 'r') as f:
             for line in f:
                 rules.append(parse_reindeer(line))
+                rules2.append(parse_reindeer(line))
     except IOError as err:
         print 'There was an error reading from disk: %s' % err.strerror
         exit()
     for i in range(args.time):
         tick(rules)
-
-    print max([r.distance for r in rules])
+    a =[r.speed*r.sprint_time*(args.time/(r.sprint_time + r.rest_time)) + r.speed*min(r.sprint_time, args.time % (r.sprint_time + r.rest_time)) for r in rules2]
+    a.sort(reverse=True)
+    print a
+    print [r.distance for r in rules]
+    print max([r.points for r in rules]) + 1
 
 
 
