@@ -1,5 +1,8 @@
 import argparse
+from collections import defaultdict
 
+
+reindeer_points = defaultdict(int)
 
 class Reindeer(object):
     def __init__(self, name, speed, sprint_time, rest_time):
@@ -27,6 +30,9 @@ class Reindeer(object):
             else:
                 self.time += 1
 
+    def tock(self, time):
+        return self.speed*self.sprint_time*(time/(self.sprint_time + self.rest_time)) * min(self.sprint_time, time % (self.sprint_time + self.rest_time))
+
 
 def parse_reindeer(line):
     line = line.split(' ')
@@ -42,6 +48,15 @@ def tick(race):
         r.tick()
     race.sort(key=lambda r: r.distance, reverse=True)
     race[0].points += 1
+
+
+def tock(race, time):
+    a = []
+    for r in race:
+        a.append((r.name, r.tock(time)))
+    a.sort(key=lambda r: r[1], reverse=True)
+    reindeer_points[a[0][0]] += 1
+
 
 
 def main():
@@ -61,11 +76,17 @@ def main():
         exit()
     for i in range(args.time):
         tick(rules)
+        tock(rules2, i + 1)
     a =[r.speed*r.sprint_time*(args.time/(r.sprint_time + r.rest_time)) + r.speed*min(r.sprint_time, args.time % (r.sprint_time + r.rest_time)) for r in rules2]
     a.sort(reverse=True)
     print a
     print [r.distance for r in rules]
     print max([r.points for r in rules]) + 1
+    b = []
+    for r in reindeer_points:
+        b.append(reindeer_points[r])
+    print max(b)
+    print sum(b)
 
 
 
